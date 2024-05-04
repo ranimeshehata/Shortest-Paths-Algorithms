@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
+import java.util.Stack;
 import java.util.Vector;
 
 public class Graph {
@@ -88,5 +89,39 @@ public class Graph {
     public Boolean floydWarshall(int[][] cost, int[][] predecessors) {
 
         return true;
+    }
+
+    public void printPath(int dest, int[] parent) {
+        int i = dest;
+        Stack<Integer> stack = new Stack<>();
+        stack.push(i);
+        while (parent[i] != -1) {
+            stack.push(parent[i]);
+            i = parent[i];
+        }
+        while (!stack.empty()) {
+            if (stack.size() == 1) System.out.print(stack.pop());
+            else
+                System.out.print(stack.pop() + " -> ");
+        }
+        System.out.println();
+    }
+
+    public void printFloydPath(int source, int dest, int[][] predecessor, int[][] cost) {
+        if (cost[source][dest] == Integer.MAX_VALUE)
+            System.out.println("NO PATH");
+        else {
+            Stack<Integer> stack = new Stack<>();
+            stack.push(dest);
+            while (predecessor[source][dest] != -1) {
+                stack.push(predecessor[source][dest]);
+                dest = predecessor[source][dest];
+            }
+            while (!stack.empty()) {
+                if (stack.size() == 1) System.out.print(stack.pop());
+                else System.out.print(stack.pop());
+            }
+            System.out.println();
+        }
     }
 }

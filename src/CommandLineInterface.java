@@ -1,3 +1,4 @@
+import java.io.File;
 import java.util.Scanner;
 
 public class CommandLineInterface {
@@ -137,7 +138,7 @@ public class CommandLineInterface {
                             System.out.println("\u001B[34m" + "Shortest path from " + source_node + " to " + destination_node + " = " + weights[source_node][destination_node] + "\u001B[0m");
                         break;
                     case 2:
-                        graph.printFloydPath(source_node, destination_node, predecessors, cost);
+                        graph.printFloydPath(source_node, destination_node, predecessors, weights);
                         break;
                     case 3:
                         break;
@@ -223,7 +224,7 @@ public class CommandLineInterface {
                         case 2:
                             if (algorithm == 3) {
                                 //print path for floyd warshall
-                                graph.printFloydPath(sourceNode, destinationNode, predecessors, cost);
+                                graph.printFloydPath(sourceNode, destinationNode, predecessors, weights);
                             } else {
                                 graph.printPath(destinationNode, parent);
                             }
@@ -238,14 +239,23 @@ public class CommandLineInterface {
     }
 
     public void Input() {
-        System.out.println("Enter the input file path: ");
-        String path = scanner.nextLine();
-        graph = new Graph(path);
-        while (graph.PathError) {
-            System.out.println("ERROR opening the input file!!");
+        boolean validPath = false;
+
+        while (!validPath) {
             System.out.println("Enter the input file path: ");
-            path = scanner.nextLine();
-            graph = new Graph(path);
+            String path = scanner.nextLine();
+            File file = new File(path);
+
+            if (file.exists()) {
+                graph = new Graph(path);
+                if (!graph.PathError) {
+                    validPath = true;
+                } else {
+                    System.out.println("ERROR opening the input file!!");
+                }
+            } else {
+                System.out.println("File not found!");
+            }
         }
         predecessors = new int[graph.getV()][graph.getV()];
         weights = new int[graph.getV()][graph.getV()];
