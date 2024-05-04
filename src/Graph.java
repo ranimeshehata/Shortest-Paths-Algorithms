@@ -5,7 +5,7 @@ import java.util.Vector;
 
 public class Graph {
     public int[][] FloydWarshallMatrix;
-    public boolean file_path_error;
+    public boolean PathError;
     final static int INFINITY = Integer.MAX_VALUE;
 
     private int V;  // number of vertices
