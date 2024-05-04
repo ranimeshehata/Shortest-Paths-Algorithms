@@ -12,6 +12,7 @@ public class CommandLineInterface {
         while (true) {
             Input();
             while (true){
+                System.out.println("<----- Main Menu ----->");
                 System.out.println("1) Find the shortest paths from source node to all other nodes.");
                 System.out.println("2) Find the shortest paths between all the pairs of nodes.");
                 System.out.println("3) Check if the graph contains a negative cycle.");
@@ -26,12 +27,16 @@ public class CommandLineInterface {
                 switch (mainMenu){
                     case 1:
                         subMenu1();
+                        break;
                     case 2:
                         subMenu2();
+                        break;
                     case 3:
                         subMenu3();
-                    case 4:
                         break;
+                }
+                if (mainMenu == 4) {
+                    break;
                 }
             }
         }
@@ -69,8 +74,9 @@ public class CommandLineInterface {
                         System.out.println("No negative cycle found");
                     }
                     break;
-                case 3:
-                    break;
+            }
+            if (algorithm == 3) {
+                break;
             }
         }
     }
@@ -116,9 +122,23 @@ public class CommandLineInterface {
             if (algorithm == 4) {
                 break;
             }
-            while (true) {
-                int source_node = InputNode("Source");
-                int destination_node = InputNode("Destination");
+
+                System.out.println("Source node: ");
+                String node = scanner.nextLine();
+                while (isValidInput(node)) {
+                    System.out.println("INVALID INPUT .. Please enter a valid one!!");
+                    node = scanner.nextLine();
+                }
+                int sourceNode =Integer.parseInt(node);
+
+                System.out.println("Destination node: ");
+                node = scanner.nextLine();
+                while (isValidInput(node)) {
+                    System.out.println("INVALID INPUT .. Please enter a valid one!!");
+                    node = scanner.nextLine();
+                }
+                int destinationNode =Integer.parseInt(node);
+
 
                 System.out.println("1) Get Path length.");
                 System.out.println("2) Get Path.");
@@ -132,23 +152,29 @@ public class CommandLineInterface {
 
                 switch (PathCost) {
                     case 1:
-                        if (weights[source_node][destination_node] == Integer.MAX_VALUE)
-                            System.out.println("\u001B[34m" + "Shortest path from " + source_node + " to " + destination_node + " = " + "NO PATH" + "\u001B[0m");
+                        if (weights[sourceNode][destinationNode] == Integer.MAX_VALUE)
+                            System.out.println("NO PATH");
                         else
-                            System.out.println("\u001B[34m" + "Shortest path from " + source_node + " to " + destination_node + " = " + weights[source_node][destination_node] + "\u001B[0m");
+                            System.out.println("Shortest path from " + sourceNode + " to " + destinationNode + " = " + weights[sourceNode][destinationNode]);
                         break;
                     case 2:
-                        graph.printFloydPath(source_node, destination_node, predecessors, weights);
-                        break;
-                    case 3:
+                        if (algorithm == 3) {
+                            //print path for floyd warshall
+                            graph.printFloydPath(sourceNode, destinationNode, predecessors, weights);
+                        } else {
+                            graph.printPath(sourceNode, destinationNode, parent);
+                        }
                         break;
                 }
-            }
+                if (PathCost == 3) {
+                    break;
+                }
         }
     }
 
     public void subMenu1() {
-        while (true) {
+        int back = 0;
+        do {
 
             System.out.println("Source node: ");
             String node = scanner.nextLine();
@@ -156,7 +182,7 @@ public class CommandLineInterface {
                 System.out.println("INVALID INPUT .. Please enter a valid one!!");
                 node = scanner.nextLine();
             }
-            int sourceNode =Integer.parseInt(node);
+            int sourceNode = Integer.parseInt(node);
 
             while (true) {
 
@@ -182,9 +208,9 @@ public class CommandLineInterface {
                     case 3:
                         graph.floydWarshall(weights, predecessors);
                         break;
-                    case 4:
-                        break;
-
+                }
+                if (algorithm == 4) {
+                    break;
                 }
 
                 System.out.println("Destination node: ");
@@ -193,7 +219,7 @@ public class CommandLineInterface {
                     System.out.println("INVALID INPUT .. Please enter a valid one!!");
                     node = scanner.nextLine();
                 }
-                int destinationNode =Integer.parseInt(node);
+                int destinationNode = Integer.parseInt(node);
 
                 while (true) {
 
@@ -211,12 +237,12 @@ public class CommandLineInterface {
                         case 1:
                             if (algorithm == 3) {
                                 if (weights[sourceNode][destinationNode] == Integer.MAX_VALUE)
-                                    System.out.println("Shortest path from " + sourceNode + " to " + destinationNode + " = " + "NO PATH");
+                                    System.out.println("NO PATH");
                                 else
                                     System.out.println("Shortest path from " + sourceNode + " to " + destinationNode + " = " + weights[sourceNode][destinationNode]);
                             } else {
                                 if (cost[destinationNode] == Integer.MAX_VALUE)
-                                    System.out.println("Shortest path from " + sourceNode + " to " + destinationNode + " = " + "NO PATH");
+                                    System.out.println("NO PATH");
                                 else
                                     System.out.println("Shortest path from " + sourceNode + " to " + destinationNode + " = " + cost[destinationNode]);
                             }
@@ -229,18 +255,19 @@ public class CommandLineInterface {
                                 graph.printPath(destinationNode, parent);
                             }
                             break;
-                        case 3:
-                            break;
+                    }
+                    if (PathCost == 3) {
+                        back++;
+                        break;
                     }
                 }
             }
-            //break;
-        }
+        } while (back != 1);
     }
 
     public void Input() {
-        boolean validPath = false;
 
+        boolean validPath = false;
         while (!validPath) {
             System.out.println("Enter the input file path: ");
             String path = scanner.nextLine();
@@ -262,16 +289,6 @@ public class CommandLineInterface {
         parent = new int[graph.getV()];
         cost = new int[graph.getV()];
         System.out.println("Graph created successfully ..");
-    }
-
-    public int InputNode(String type) {
-        System.out.println("Enter " + type + " node: ");
-        String node = scanner.nextLine();
-        while (isValidInput(node)) {
-            System.out.println("INVALID INPUT .. Please enter a valid one!!");
-            node = scanner.nextLine();
-        }
-        return Integer.parseInt(node);
     }
 
     private boolean isValidInput(String node) {

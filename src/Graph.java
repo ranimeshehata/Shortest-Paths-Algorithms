@@ -78,11 +78,39 @@ public class Graph {
     }
 
     public void dijkstra(int source, int[] parent, int[] cost) {
+        int[] visited = new int[V];
+        for (int i = 0; i < V; i++) {
+            visited[i] = 0;
+            cost[i] = INFINITY;
+            parent[i] = -1;
+        }
+        cost[source] = 0;
+        for (int i = 0; i < V - 1; i++) {
+            int u = minDistance(cost, visited);
+            visited[u] = 1;
+            for (int v = 0; v < V; v++) {
+                if (visited[v] == 0 && graph[u][v] != 0 && cost[u] != INFINITY && cost[u] + graph[u][v] < cost[v]) {
+                    cost[v] = cost[u] + graph[u][v];
+                    parent[v] = u;
+                }
+            }
+        }
 
     }
 
-    public Boolean bellmanFord(int source, int[] parent, int[] cost) {
+    private int minDistance(int[] cost, int[] visited) {
+        int min = INFINITY;
+        int min_index = -1;
+        for (int v = 0; v < V; v++) {
+            if (visited[v] == 0 && cost[v] <= min) {
+                min = cost[v];
+                min_index = v;
+            }
+        }
+        return min_index;
+    }
 
+    public Boolean bellmanFord(int source, int[] parent, int[] cost) {
         return true;
     }
 
@@ -123,5 +151,32 @@ public class Graph {
             }
             System.out.println();
         }
+    }
+
+    public void printPath(int sourceNode, int destinationNode, int[] parent) {
+        // Stack to store the path
+        Stack<Integer> path = new Stack<>();
+
+        // Start from the destination node
+        int currentNode = destinationNode;
+
+        // Traverse upwards using the parent array until reaching the source node
+        while (currentNode != sourceNode) {
+            path.push(currentNode);
+            currentNode = parent[currentNode];
+        }
+
+        // Add the source node
+        path.push(sourceNode);
+
+        // Print the path
+        System.out.print("Path from " + sourceNode + " to " + destinationNode + ": ");
+        while (!path.isEmpty()) {
+            System.out.print(path.pop());
+            if (!path.isEmpty()) {
+                System.out.print(" -> ");
+            }
+        }
+        System.out.println();
     }
 }
