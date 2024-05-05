@@ -111,6 +111,37 @@ public class Graph {
     }
 
     public boolean bellmanFord(int source, int[] parent, int[] cost) {
+        for (int i = 0; i < this.V; ++i)
+            cost[i] = Integer.MAX_VALUE;
+        cost[source] = 0;
+        boolean redused = true;
+
+        for (int i = 1; i < this.V && redused ; ++i) {
+            redused = false;
+            for (Edges e : this.edges) {
+                int u = e.getSrc();
+                int v = e.getDest();
+                int weight = e.getWeight();
+                if (cost[u] != Integer.MAX_VALUE
+                        && cost[u] + weight < cost[v]) {
+                    redused = true;
+                    cost[v] = cost[u] + weight;
+                    parent[v] = u;
+                }
+            }
+        }
+
+        if(redused)
+            for (Edges e : this.edges) {
+                int u = e.getSrc();
+                int v = e.getDest();
+                int weight = e.getWeight();
+                if (cost[u] != Integer.MAX_VALUE
+                        && cost[u] + weight < cost[v]) {
+                    return false;
+                }
+            }
+
         return true;
     }
 
