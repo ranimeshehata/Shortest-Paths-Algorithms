@@ -110,11 +110,11 @@ public class Graph {
         return min_index;
     }
 
-    public Boolean bellmanFord(int source, int[] parent, int[] cost) {
+    public boolean bellmanFord(int source, int[] parent, int[] cost) {
         return true;
     }
 
-    public Boolean floydWarshall(int[][] cost, int[][] predecessors) {
+    public boolean floydWarshall(int[][] cost, int[][] predecessors) {
 
         return true;
     }
@@ -122,9 +122,9 @@ public class Graph {
     public void printPath(int dest, int[] parent) {
         int i = dest;
         Stack<Integer> stack = new Stack<>();
-        stack.push(i);
+        stack.push(Integer.valueOf(i));
         while (parent[i] != -1) {
-            stack.push(parent[i]);
+            stack.push(Integer.valueOf(parent[i]));
             i = parent[i];
         }
         while (!stack.empty()) {
@@ -140,9 +140,9 @@ public class Graph {
             System.out.println("NO PATH");
         else {
             Stack<Integer> stack = new Stack<>();
-            stack.push(dest);
+            stack.push(Integer.valueOf(dest));
             while (predecessor[source][dest] != -1) {
-                stack.push(predecessor[source][dest]);
+                stack.push(Integer.valueOf(predecessor[source][dest]));
                 dest = predecessor[source][dest];
             }
             while (!stack.empty()) {
@@ -162,12 +162,12 @@ public class Graph {
 
         // Traverse upwards using the parent array until reaching the source node
         while (currentNode != sourceNode) {
-            path.push(currentNode);
+            path.push(Integer.valueOf(currentNode));
             currentNode = parent[currentNode];
         }
 
         // Add the source node
-        path.push(sourceNode);
+        path.push(Integer.valueOf(sourceNode));
 
         // Print the path
         System.out.print("Path from " + sourceNode + " to " + destinationNode + ": ");
