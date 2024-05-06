@@ -8,6 +8,7 @@ public class CommandLineInterface {
     int[][] weights;
     int[] parent;
     int[] cost;
+final static int INFINITY = Integer.MAX_VALUE;
     public void Interface() {
         while (true) {
             Input();
@@ -288,6 +289,12 @@ public class CommandLineInterface {
         weights = new int[graph.getV()][graph.getV()];
         parent = new int[graph.getV()];
         cost = new int[graph.getV()];
+        weights=graph.FloydWarshallMatrix;
+        for (int i = 0; i < weights.length; i++) {
+            for (int j = 0; j < weights.length; j++) {
+                predecessors[i][j] = (i == j || weights[i][j] == INFINITY) ? -1 : i;
+            }
+        }
         System.out.println("Graph created successfully ..");
     }
 
