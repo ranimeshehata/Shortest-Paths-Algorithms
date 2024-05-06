@@ -6,6 +6,7 @@ import java.util.Vector;
 
 public class Graph {
     public int[][] FloydWarshallMatrix;
+    public int[][] FloydWarshallPredecessor;
     public boolean PathError;
     final static int INFINITY = Integer.MAX_VALUE;
 
@@ -114,9 +115,24 @@ public class Graph {
         return true;
     }
 
-    public Boolean floydWarshall(int[][] cost, int[][] predecessors) {
-
-        return true;
+    public Boolean floydWarshall(int[][] costs, int[][] predecessors) {
+       int V = costs.length;
+    for (int k = 0; k < V; k++) {
+        for (int i = 0; i < V; i++) {
+            for (int j = 0; j < V; j++) {
+                if (costs[i][k] != Integer.MAX_VALUE && costs[k][j] != Integer.MAX_VALUE && costs[i][k] + costs[k][j] < costs[i][j]) {
+                    costs[i][j] = costs[i][k] + costs[k][j];
+                    predecessors[i][j] = predecessors[k][j];
+                }
+            }
+        }
+    }
+    for (int i = 0; i < V; i++) {
+        if (costs[i][i] < 0) {
+            return false;
+        }
+    }
+    return true;
     }
 
     public void printPath(int dest, int[] parent) {
@@ -136,22 +152,28 @@ public class Graph {
     }
 
     public void printFloydPath(int source, int dest, int[][] predecessor, int[][] cost) {
-        if (cost[source][dest] == Integer.MAX_VALUE)
+        if (cost[source][dest] == Integer.MAX_VALUE) {
             System.out.println("NO PATH");
-        else {
+        } else {
             Stack<Integer> stack = new Stack<>();
             stack.push(dest);
             while (predecessor[source][dest] != -1) {
                 stack.push(predecessor[source][dest]);
                 dest = predecessor[source][dest];
             }
-            while (!stack.empty()) {
-                if (stack.size() == 1) System.out.print(stack.pop());
-                else System.out.print(stack.pop());
+            System.out.print("Path: ");
+            while (!stack.isEmpty()) {
+                int node = stack.pop();
+                if (!stack.isEmpty()) {
+                    System.out.print(node + " -> ");
+                } else {
+                    System.out.println(node);
+                }
             }
-            System.out.println();
         }
     }
+    
+    
 
     public void printPath(int sourceNode, int destinationNode, int[] parent) {
         // Stack to store the path
