@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.Stack;
 import java.util.Vector;
@@ -19,10 +20,6 @@ public class Graph {
 
         this.path = path;
         readInputFile(path);
-    }
-
-    public int[][] getGraph() {
-        return graph;
     }
 
     public int getV() {
@@ -110,104 +107,117 @@ public class Graph {
         return min_index;
     }
 
-    public boolean bellmanFord(int source, int[] parent, int[] cost) {
-        for (int i = 0; i < this.V; ++i)
-            cost[i] = Integer.MAX_VALUE;
-        cost[source] = 0;
-        boolean redused = true;
-
-        for (int i = 1; i < this.V && redused ; ++i) {
-            redused = false;
-            for (Edges e : this.edges) {
-                int u = e.getSrc();
-                int v = e.getDest();
-                int weight = e.getWeight();
-                if (cost[u] != Integer.MAX_VALUE
-                        && cost[u] + weight < cost[v]) {
-                    redused = true;
-                    cost[v] = cost[u] + weight;
+    public Boolean bellmanFord(int source, int[] parent, int[] cost) {
+        int[] values = new int[V];
+        for (int i = 0; i < V; i++) {
+            values[i] = Integer.MAX_VALUE;
+        }
+        parent[source] = -1;
+        values[source] = 0;
+        Arrays.fill(parent, -1);
+        boolean updated = false;
+        boolean redused = false;
+        for (int i = 0; i < V - 1; i++) {
+            updated = false;
+            for (int j = 0; j < E; j++) {
+                int u = edges.get(j).getSrc();
+                int v = edges.get(j).getDest();
+                int w = edges.get(j).getWeight();
+                if (values[u] != Integer.MAX_VALUE && values[u] + w < values[v]) {
+                    values[v] = values[u] + w;
                     parent[v] = u;
+                    cost[v] = values[v];
+                    updated = true;
                 }
+            }
+            if (!updated) break;
+
+        }
+        for (int j = 0; j < E && updated; j++) {
+            int u = edges.get(j).getSrc();
+            int v = edges.get(j).getDest();
+            int w = edges.get(j).getWeight();
+            if (values[u] != Integer.MAX_VALUE && values[u] + w < values[v]) {
+                redused = true;
+                break;
             }
         }
 
-        if(redused)
-            for (Edges e : this.edges) {
-                int u = e.getSrc();
-                int v = e.getDest();
-                int weight = e.getWeight();
-                if (cost[u] != Integer.MAX_VALUE
-                        && cost[u] + weight < cost[v]) {
-                    return false;
-                }
-            }
-
+        if (redused) {
+            return false;
+        }
+        System.arraycopy(values, 0, cost, 0, V);
         return true;
     }
 
-    public boolean floydWarshall(int[][] cost, int[][] predecessors) {
-
+    public Boolean floydWarshall(int[][] costs, int[][] predecessors) {
+        for (int i = 0; i < V; i++) {
+            for (int j = 0; j < V; j++) {
+                costs[i][j] = FloydWarshallMatrix[i][j];
+                if (i == j) {
+                    predecessors[i][j] = -1;
+                } else if (FloydWarshallMatrix[i][j] != INFINITY) {
+                    predecessors[i][j] = i;
+                } else predecessors[i][j] = -1;
+            }
+        }
+        for (int k = 0; k < V; k++) {
+            for (int i = 0; i < V; i++) {
+                for (int j = 0; j < V; j++) {
+                    if ((costs[i][k] != INFINITY) && (costs[k][j] != INFINITY) && (costs[i][k] + costs[k][j] < costs[i][j])) {
+                        costs[i][j] = costs[i][k] + costs[k][j];
+                        predecessors[i][j] = predecessors[k][j];
+                    }
+                }
+            }
+        }
+        //detect negative cycle
+        for (int i = 0; i < V; i++) {
+            if (costs[i][i] < 0) {
+                return false;
+            }
+        }
         return true;
+    }
+
+    public void printFloydPath(int source, int dest, int[][] predecessor, int[][] cost) {
+        if (cost[source][dest] == Integer.MAX_VALUE) {
+            System.out.println("NO PATH");
+            System.out.println("*-----------------------------------------------*");
+        } else {
+            Stack<Integer> stack = new Stack<>();
+            stack.push(dest);
+            while (predecessor[source][dest] != -1) {
+                stack.push(predecessor[source][dest]);
+                dest = predecessor[source][dest];
+            }
+            // Print the path
+            while (!stack.isEmpty()) {
+                int node = stack.pop();
+                if (!stack.isEmpty()) {
+                    System.out.print(node + " -> ");
+                } else {
+                    System.out.println(node);
+                }
+            }
+            System.out.println("*-----------------------------------------------*");
+        }
     }
 
     public void printPath(int dest, int[] parent) {
         int i = dest;
         Stack<Integer> stack = new Stack<>();
-        stack.push(Integer.valueOf(i));
+        stack.push(i);
         while (parent[i] != -1) {
-            stack.push(Integer.valueOf(parent[i]));
+            stack.push(parent[i]);
             i = parent[i];
         }
         while (!stack.empty()) {
             if (stack.size() == 1) System.out.print(stack.pop());
             else
-                System.out.print(stack.pop() + " -> ");
+                System.out.print(stack.pop() + " -> " );
         }
         System.out.println();
-    }
-
-    public void printFloydPath(int source, int dest, int[][] predecessor, int[][] cost) {
-        if (cost[source][dest] == Integer.MAX_VALUE)
-            System.out.println("NO PATH");
-        else {
-            Stack<Integer> stack = new Stack<>();
-            stack.push(Integer.valueOf(dest));
-            while (predecessor[source][dest] != -1) {
-                stack.push(Integer.valueOf(predecessor[source][dest]));
-                dest = predecessor[source][dest];
-            }
-            while (!stack.empty()) {
-                if (stack.size() == 1) System.out.print(stack.pop());
-                else System.out.print(stack.pop());
-            }
-            System.out.println();
-        }
-    }
-
-    public void printPath(int sourceNode, int destinationNode, int[] parent) {
-        // Stack to store the path
-        Stack<Integer> path = new Stack<>();
-
-        // Start from the destination node
-        int currentNode = destinationNode;
-
-        // Traverse upwards using the parent array until reaching the source node
-        while (currentNode != sourceNode) {
-            path.push(Integer.valueOf(currentNode));
-            currentNode = parent[currentNode];
-        }
-
-        // Add the source node
-        path.push(Integer.valueOf(sourceNode));
-
-        // Print the path
-        System.out.print("Path from " + sourceNode + " to " + destinationNode + ": ");
-        while (!path.isEmpty()) {
-            System.out.print(path.pop());
-            if (!path.isEmpty()) {
-                System.out.print(" -> ");
-            }
-        }
-        System.out.println();
+        System.out.println("*-----------------------------------------------*");
     }
 }

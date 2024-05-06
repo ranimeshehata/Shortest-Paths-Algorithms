@@ -8,7 +8,7 @@ public class CommandLineInterface {
     int[][] weights;
     int[] parent;
     int[] cost;
-final static int INFINITY = Integer.MAX_VALUE;
+
     public void Interface() {
         while (true) {
             Input();
@@ -21,10 +21,11 @@ final static int INFINITY = Integer.MAX_VALUE;
                 String option = scanner.nextLine();
                 while (!(option.equals("1") || option.equals("2") || option.equals("3") || option.equals("4"))) {
                     System.out.println("INVALID INPUT .. Please enter a valid one!!");
+                    System.out.println("*-----------------------------------------------*");
                     option = scanner.nextLine();
                 }
                 int mainMenu = Integer.parseInt(option);
-                
+
                 switch (mainMenu){
                     case 1:
                         subMenu1();
@@ -53,6 +54,7 @@ final static int INFINITY = Integer.MAX_VALUE;
             String option = scanner.nextLine();
             while (!(option.equals("1") || option.equals("2") || option.equals("3"))) {
                 System.out.println("INVALID INPUT .. Please enter a valid one!!");
+                System.out.println("*-----------------------------------------------*");
                 option = scanner.nextLine();
             }
             int algorithm = Integer.parseInt(option);
@@ -63,16 +65,20 @@ final static int INFINITY = Integer.MAX_VALUE;
                     negativeCycle = graph.bellmanFord(0, parent, cost);
                     if (!negativeCycle) {
                         System.out.println("Negative cycle found");
+                        System.out.println("*-----------------------------------------------*");
                     } else {
                         System.out.println("No negative cycle found");
+                        System.out.println("*-----------------------------------------------*");
                     }
                     break;
                 case 2: //floydWarshall
                     negativeCycle = graph.floydWarshall(weights, predecessors);
                     if (!negativeCycle) {
                         System.out.println("Negative cycle found");
+                        System.out.println("*-----------------------------------------------*");
                     } else {
                         System.out.println("No negative cycle found");
+                        System.out.println("*-----------------------------------------------*");
                     }
                     break;
             }
@@ -93,6 +99,7 @@ final static int INFINITY = Integer.MAX_VALUE;
             String option = scanner.nextLine();
             while (!(option.equals("1") || option.equals("2") || option.equals("3") || option.equals("4"))) {
                 System.out.println("INVALID INPUT .. Please enter a valid one!!");
+                System.out.println("*-----------------------------------------------*");
                 option = scanner.nextLine();
             }
             int algorithm = Integer.parseInt(option);
@@ -123,11 +130,11 @@ final static int INFINITY = Integer.MAX_VALUE;
             if (algorithm == 4) {
                 break;
             }
-
                 System.out.println("Source node: ");
                 String node = scanner.nextLine();
                 while (isValidInput(node)) {
                     System.out.println("INVALID INPUT .. Please enter a valid one!!");
+                    System.out.println("*-----------------------------------------------*");
                     node = scanner.nextLine();
                 }
                 int sourceNode =Integer.parseInt(node);
@@ -136,6 +143,7 @@ final static int INFINITY = Integer.MAX_VALUE;
                 node = scanner.nextLine();
                 while (isValidInput(node)) {
                     System.out.println("INVALID INPUT .. Please enter a valid one!!");
+                    System.out.println("*-----------------------------------------------*");
                     node = scanner.nextLine();
                 }
                 int destinationNode =Integer.parseInt(node);
@@ -147,24 +155,24 @@ final static int INFINITY = Integer.MAX_VALUE;
                 option = scanner.nextLine();
                 while (!(option.equals("1") || option.equals("2") || option.equals("3"))) {
                     System.out.println("INVALID INPUT .. Please enter a valid one!!");
+                    System.out.println("*-----------------------------------------------*");
                     option = scanner.nextLine();
                 }
                 int PathCost = Integer.parseInt(option);
 
                 switch (PathCost) {
                     case 1:
-                        if (weights[sourceNode][destinationNode] == Integer.MAX_VALUE)
+                        if (weights[sourceNode][destinationNode] == Integer.MAX_VALUE){
                             System.out.println("NO PATH");
-                        else
+                            System.out.println("*-----------------------------------------------*");
+                        }
+                        else {
                             System.out.println("Shortest path from " + sourceNode + " to " + destinationNode + " = " + weights[sourceNode][destinationNode]);
+                            System.out.println("*-----------------------------------------------*");
+                        }
                         break;
                     case 2:
-                        if (algorithm == 3) {
-                            //print path for floyd warshall
-                            graph.printFloydPath(sourceNode, destinationNode, predecessors, weights);
-                        } else {
-                            graph.printPath(sourceNode, destinationNode, parent);
-                        }
+                        graph.printFloydPath(sourceNode, destinationNode, predecessors, weights);
                         break;
                 }
                 if (PathCost == 3) {
@@ -175,12 +183,13 @@ final static int INFINITY = Integer.MAX_VALUE;
 
     public void subMenu1() {
         int back = 0;
-        do {
+        while (back == 0){
 
             System.out.println("Source node: ");
             String node = scanner.nextLine();
             while (isValidInput(node)) {
                 System.out.println("INVALID INPUT .. Please enter a valid one!!");
+                System.out.println("*-----------------------------------------------*");
                 node = scanner.nextLine();
             }
             int sourceNode = Integer.parseInt(node);
@@ -195,6 +204,7 @@ final static int INFINITY = Integer.MAX_VALUE;
                 String option = scanner.nextLine();
                 while (!(option.equals("1") || option.equals("2") || option.equals("3") || option.equals("4"))) {
                     System.out.println("INVALID INPUT .. Please enter a valid one!!");
+                    System.out.println("*-----------------------------------------------*");
                     option = scanner.nextLine();
                 }
                 int algorithm = Integer.parseInt(option);
@@ -218,6 +228,7 @@ final static int INFINITY = Integer.MAX_VALUE;
                 node = scanner.nextLine();
                 while (isValidInput(node)) {
                     System.out.println("INVALID INPUT .. Please enter a valid one!!");
+                    System.out.println("*-----------------------------------------------*");
                     node = scanner.nextLine();
                 }
                 int destinationNode = Integer.parseInt(node);
@@ -230,6 +241,7 @@ final static int INFINITY = Integer.MAX_VALUE;
                     option = scanner.nextLine();
                     while (!(option.equals("1") || option.equals("2") || option.equals("3"))) {
                         System.out.println("INVALID INPUT .. Please enter a valid one!!");
+                        System.out.println("*-----------------------------------------------*");
                         option = scanner.nextLine();
                     }
                     int PathCost = Integer.parseInt(option);
@@ -247,6 +259,7 @@ final static int INFINITY = Integer.MAX_VALUE;
                                 else
                                     System.out.println("Shortest path from " + sourceNode + " to " + destinationNode + " = " + cost[destinationNode]);
                             }
+                            System.out.println("*-----------------------------------------------*");
                             break;
                         case 2:
                             if (algorithm == 3) {
@@ -263,11 +276,10 @@ final static int INFINITY = Integer.MAX_VALUE;
                     }
                 }
             }
-        } while (back != 1);
+        }
     }
 
     public void Input() {
-
         boolean validPath = false;
         while (!validPath) {
             System.out.println("Enter the input file path: ");
@@ -280,23 +292,20 @@ final static int INFINITY = Integer.MAX_VALUE;
                     validPath = true;
                 } else {
                     System.out.println("ERROR opening the input file!!");
+                    System.out.println("*-----------------------------------------------*");
                 }
             } else {
                 System.out.println("File not found!");
+                System.out.println("*-----------------------------------------------*");
             }
         }
         predecessors = new int[graph.getV()][graph.getV()];
         weights = new int[graph.getV()][graph.getV()];
         parent = new int[graph.getV()];
         cost = new int[graph.getV()];
-        weights=graph.FloydWarshallMatrix;
-        for (int i = 0; i < weights.length; i++) {
-            for (int j = 0; j < weights.length; j++) {
-                predecessors[i][j] = (i == j || weights[i][j] == INFINITY) ? -1 : i;
-            }
+            System.out.println("Graph created successfully ..");
         }
-        System.out.println("Graph created successfully ..");
-    }
+
 
     private boolean isValidInput(String node) {
         try {
