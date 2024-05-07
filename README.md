@@ -66,3 +66,4 @@ tively. This line is followed by E lines describing the edges in the graph. Each
  Provided a set of 15-20 JUnit tests that test the correctness and effeciency of the
  different implemented parts. Also, these tests show a comprehensive comparison between
  the 3 algorithms w.r.t time factor.
+![image](https://github.com/ranimeshehata/Shortest-Paths-Algorithms/assets/121239735/c292944a-cdc4-4429-88a7-3d8a36bf7fcd)
